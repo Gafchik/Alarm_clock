@@ -51,10 +51,10 @@ namespace WpfApp3.View
             else
                 CH_AutoT_ON.IsChecked = false;
 
-            if (MainWindow.settings.ThemNightIsEnable)
-            {
                 CH_Day_T.Checked += CH_Day_T_Checked;
                 CH_Day_T.Unchecked += CH_Day_T_Unchecked;
+            if (MainWindow.settings.ThemNightIsEnable)
+            {
                 if (MainWindow.settings.ThemNight)
                     CH_Day_T.IsChecked = true;
                 else
@@ -79,12 +79,13 @@ namespace WpfApp3.View
         private void CH_txt_Unchecked(object sender, RoutedEventArgs e)
         {
             MainWindow.settings.TypeMonth = false;
-           
+            (win.DataContext as ModelView).InitializeComponen();
         }
         //включение месяц текстом
         private void CH_txt_Checked(object sender, RoutedEventArgs e)
         {
             MainWindow.settings.TypeMonth = true;
+            (win.DataContext as ModelView).InitializeComponen();
 
         }
         //вкючить дневную тему
@@ -102,12 +103,14 @@ namespace WpfApp3.View
         // убрать из автозапуска
         private void CH_AutoRun_ON_Unchecked(object sender, RoutedEventArgs e)
         { 
-            MainWindow.settings.Autorun = false; 
+            MainWindow.settings.Autorun = false;
+            win.Autorun();
         }
         // добавить в автозапуск
         private void CH_AutoRun_ON_Checked(object sender, RoutedEventArgs e)
         {
             MainWindow.settings.Autorun = true;
+            win.Autorun();
         }
 
 
@@ -129,15 +132,20 @@ namespace WpfApp3.View
         {
             CH_Day_T.IsEnabled = true;
             MainWindow.settings.ThemNightIsEnable = true;
+            MainWindow.settings.ThemAuto = false;
+            win.SetDayThem();
         }
         //автотема вкл
         private void CH_AutoT_ON_Checked(object sender, RoutedEventArgs e)
         {
+            MainWindow.settings.ThemAuto = true;
             CH_Day_T.IsEnabled = false;
             if (CH_Day_T.IsChecked.Value)
                 CH_Day_T.IsChecked = false;
             MainWindow.settings.ThemNightIsEnable = false;
-            
+            win.AutoThem();
+
+
         }
 
         private void Color_Click(object sender, RoutedEventArgs e)

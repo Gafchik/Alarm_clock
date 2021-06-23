@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,18 +26,21 @@ namespace WpfApp3
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-        XmlSerializer formatter = new XmlSerializer(typeof(Settings));
-        public static Settings settings = new Settings();
-        List<string> them;
-        public string path_setting = Environment.CurrentDirectory;
+        Timer t = new Timer();
+        XmlSerializer formatter = new XmlSerializer(typeof(Settings)); // серелизатор для настроек
+        public static Settings settings = new Settings(); // класс для настроек
+        List<string> them; // коллекция с темами
+        public string path_setting = Environment.CurrentDirectory; // путь для настроек
+        public string path_exe = Environment.CurrentDirectory; // путь для ехе
         public MainWindow()
-        {
+        {        
+            t.Interval = 10000;
+            t.Elapsed += T_Elapsed;
+            t.Start();
+
             path_setting += "\\setting.xml";
-            var q = Directory.GetFiles(Environment.CurrentDirectory).ToList();
-         // if (Directory.GetFiles(Environment.CurrentDirectory).ToList().Exists(i => i == (Environment.CurrentDirectory+="\\setting.xml")))
-          if (Directory.GetFiles(Environment.CurrentDirectory).ToList().Exists(i => i == path_setting))
-          
+            path_exe += "\\WpfApp3.exe";
+            if (Directory.GetFiles(Environment.CurrentDirectory).ToList().Exists(i => i == path_setting))
             {
                 try
                 {
@@ -45,26 +50,44 @@ namespace WpfApp3
                     }
                 }
                 catch (Exception)
-                {  SaveSetting(); }
+                { SaveSetting(); }
             }
             else
-            {  SaveSetting();  }
-           
-           
+            { SaveSetting(); }
+
+
             them = new List<string>() { "DayStyle", "NightStyle" };
 
             InitializeComponent();
             DataContext = new ModelView();
-            if (settings.ThemNightIsEnable)
+            if (settings.ThemAuto)
+                AutoThem();
+            else
             {
-                if (settings.ThemNight)
+                if (settings.ThemNightIsEnable)
+                {
+                    if (settings.ThemNight)
+                        SetNightThem();
+                    else
+                        SetDayThem();
+                }
+                else
+                    SetDayThem();
+            }
+        }
+
+        private void T_Elapsed(object sender, ElapsedEventArgs e) => AutoThem();
+        public void AutoThem()
+        {
+            if (settings.ThemAuto)
+            {
+                if (DateTime.Now.Hour > 18)
                     SetNightThem();
                 else
                     SetDayThem();
             }
-            else
-                SetDayThem();
         }
+
 
         private void Button_Click(object sender, RoutedEventArgs e) => new Setting(this).ShowDialog();
         
@@ -80,8 +103,6 @@ namespace WpfApp3
                 using (FileStream fs = new FileStream("setting.xml", FileMode.OpenOrCreate))
                 { formatter.Serialize(fs, settings); }
             }
-
-
             
         }
         public void SetDayThem()
@@ -89,6 +110,7 @@ namespace WpfApp3
             Application.Current.Resources.Clear();
             ResourceDictionary resource = (ResourceDictionary)Application.LoadComponent(new Uri("Style/" + them[0] + ".xaml", UriKind.Relative));
             Application.Current.Resources.MergedDictionaries.Add(resource);
+           
         }
         public void SetNightThem()
         {
@@ -96,6 +118,28 @@ namespace WpfApp3
             ResourceDictionary resource = (ResourceDictionary)Application.LoadComponent(new Uri("Style/" + them[1] + ".xaml", UriKind.Relative));
             Application.Current.Resources.MergedDictionaries.Add(resource);
            
+        }
+
+        internal void Autorun()
+        {
+            if (settings.Autorun)
+            {
+                var autostart = Registry.CurrentUser.CreateSubKey("Software").
+                        CreateSubKey("Microsoft").
+                        CreateSubKey("Windows").
+                        CreateSubKey("CurrentVersion").
+                        CreateSubKey("Run");
+                autostart.SetValue("Alarm_clock", path_exe);
+            }
+            else
+            {
+                var autostart = Registry.CurrentUser.CreateSubKey("Software").
+                       CreateSubKey("Microsoft").
+                       CreateSubKey("Windows").
+                       CreateSubKey("CurrentVersion").
+                       CreateSubKey("Run");
+                autostart.DeleteValue("Alarm_clock");
+            }
         }
     }
 }

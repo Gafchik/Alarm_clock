@@ -6,10 +6,11 @@
         <Setter Property="TextBlock.VerticalAlignment" Value="Center" />
         <Setter Property="TextBlock.HorizontalAlignment" Value="Center" />
         <Setter Property="TextBlock.Margin" Value="5 0" />
+        <Setter Property="TextBlock.Foreground" Value="White" />
       
     </Style>
 
     <Style  x:Key="StyleForWindow">
-        <Setter Property="Grid.Background" Value="DarkGreen"/>
+        <Setter Property="Grid.Background" Value="DarkSlateBlue"/>
     </Style>
 </ResourceDictionary>

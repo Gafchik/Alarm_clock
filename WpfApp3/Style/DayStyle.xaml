@@ -9,6 +9,7 @@
         <Setter Property="TextBlock.Margin" Value="5 0" />
         <Setter Property="TextBlock.Background" Value="GreenYellow"/>
         <Setter x:Name="FG" Property="TextBlock.Foreground" Value="Blue"/>
+        
     </Style>
 
     <Style  x:Key="StyleForWindow">

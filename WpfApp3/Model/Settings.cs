@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,8 @@ namespace WpfApp3.Model
     {
         public Settings()
         {
-                       
             FullFormatTime = true;
-            Autorun = false;
+                Autorun = true;
             ThemNight = false;
             ThemAuto = false;
             if (ThemAuto)
