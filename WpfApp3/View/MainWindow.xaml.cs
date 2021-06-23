@@ -29,7 +29,7 @@ namespace WpfApp3
         Timer t = new Timer();
         XmlSerializer formatter = new XmlSerializer(typeof(Settings)); // серелизатор для настроек
         public static Settings settings = new Settings(); // класс для настроек
-        List<string> them; // коллекция с темами
+        List<Uri> them; // коллекция с темами
         public string path_setting = Environment.CurrentDirectory; // путь для настроек
         public string path_exe = Environment.CurrentDirectory; // путь для ехе
         public MainWindow()
@@ -56,7 +56,12 @@ namespace WpfApp3
             { SaveSetting(); }
 
 
-            them = new List<string>() { "DayStyle", "NightStyle" };
+            them = new List<Uri>
+            {
+               new Uri("Style/" + "DayStyle" + ".xaml", UriKind.Relative) , 
+               new Uri("Style/" + "NightStyle" + ".xaml", UriKind.Relative) , 
+                 
+            };
 
             InitializeComponent();
             DataContext = new ModelView();
@@ -105,20 +110,9 @@ namespace WpfApp3
             }
             
         }
-        public void SetDayThem()
-        {
-            Application.Current.Resources.Clear();
-            ResourceDictionary resource = (ResourceDictionary)Application.LoadComponent(new Uri("Style/" + them[0] + ".xaml", UriKind.Relative));
-            Application.Current.Resources.MergedDictionaries.Add(resource);
-           
-        }
-        public void SetNightThem()
-        {
-            Application.Current.Resources.Clear();
-            ResourceDictionary resource = (ResourceDictionary)Application.LoadComponent(new Uri("Style/" + them[1] + ".xaml", UriKind.Relative));
-            Application.Current.Resources.MergedDictionaries.Add(resource);
-           
-        }
+        public void SetDayThem() => Application.Current.Resources.Source = them[0];     
+        public void SetNightThem() => Application.Current.Resources.Source = them[1];
+
 
         internal void Autorun()
         {
