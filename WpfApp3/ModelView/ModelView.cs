@@ -26,13 +26,23 @@ namespace WpfApp3
 
         private void T_Elapsed(object sender, ElapsedEventArgs e) => InitializeComponen();
 
-
+        private void SetShortFormatHorse()
+        {
+            if (DateTime.Now.Hour > 12)
+            { TimeH = (DateTime.Now.Hour - 12).ToString(); }
+            else
+                TimeH = DateTime.Now.Hour.ToString();
+        }
 
         public void InitializeComponen()
         {
             Delimiter = ":";
-            TimeH = DateTime.Now.Hour.ToString();
-            TimeM = DateTime.Now.Minute.ToString();
+            if (MainWindow.settings.FullFormatTime)
+                TimeH = DateTime.Now.Hour.ToString();
+            else
+                SetShortFormatHorse();
+
+                TimeM = DateTime.Now.Minute.ToString();
             DataD = DateTime.Now.Day.ToString();
             DataM = DateTime.Now.Month.ToString();
             DataY = DateTime.Now.Year.ToString();

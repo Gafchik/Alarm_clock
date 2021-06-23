@@ -6,7 +6,7 @@
         <Setter Property="TextBlock.VerticalAlignment" Value="Center" />
         <Setter Property="TextBlock.HorizontalAlignment" Value="Center" />
         <Setter Property="TextBlock.Margin" Value="5 0" />
-        <Setter Property="TextBlock.Background" Value="DarkGreen"/>
+      
     </Style>
 
     <Style  x:Key="StyleForWindow">
