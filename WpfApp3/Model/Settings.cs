@@ -22,16 +22,20 @@ namespace WpfApp3.Model
             else
                 ThemNightIsEnable = true;
             TypeMonth = false;
-        }
+            Arlam = false;
+            Hour = 0;
+            Min = 0;
+    }
 
-        public Color ColorTime { get; set; }
-        public Color ColorDate { get; set; }
         public bool FullFormatTime { get; set; }
         public bool Autorun { get; set; }
         public bool ThemAuto { get; set; }
         public bool ThemNightIsEnable { get; set; }
         public bool ThemNight { get; set; }
         public bool TypeMonth { get; set; }
+        public bool Arlam { get; set; }
+        public int Hour { get; set; }
+        public int Min { get; set; }
         
     }
 }

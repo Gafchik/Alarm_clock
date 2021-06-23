@@ -30,8 +30,12 @@
         <TextBlock Text="{Binding DataM}" Grid.Column="6" Style="{DynamicResource StyleForTextBox}"/>
         <TextBlock Text="{Binding Delimiter}" Grid.Column="7" Style="{DynamicResource StyleForTextBox}"/>
         <TextBlock Text="{Binding DataY}" Grid.Column="8" Style="{DynamicResource StyleForTextBox}"/>
+        <StackPanel Grid.Column="9">
+        <Button Click="Button_Setting_Click" Content="На стройке"  Width="100" Margin="5 15" />
+            <Button Click="Button_Arlam_Click" Content="Бодрильник"  Width="100" Margin="5 15" />
+            
+        </StackPanel>
         
-        <Button Click="Button_Click" Content="Setting" Grid.Column="9" Width="100" Margin="5 30" />
 
     </Grid>
 </Window>

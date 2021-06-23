@@ -56,7 +56,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModelView\Arlam_ModelView.cs" />
     <Compile Include="Model\Settings.cs" />
+    <Compile Include="View\Arlam.xaml.cs">
+      <DependentUpon>Arlam.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Arlam_Go.xaml.cs">
+      <DependentUpon>Arlam_Go.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Setting.xaml.cs">
       <DependentUpon>Setting.xaml</DependentUpon>
     </Compile>
@@ -65,6 +72,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style\NightStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Arlam.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Arlam_Go.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

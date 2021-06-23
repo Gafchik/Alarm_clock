@@ -24,7 +24,7 @@ namespace WpfApp3.View
             Closed += Setting_Closed;
             win = mainWindow;
             InitializeComponent();
-            Color.Click += Color_Click;
+           
             // Color_Time = MainWindow.settings.ColorTime;
             //Color_Data
             CH_Fofmat_Full.Checked += CH_Fofmat_Full_Checked;
@@ -148,12 +148,6 @@ namespace WpfApp3.View
 
         }
 
-        private void Color_Click(object sender, RoutedEventArgs e)
-        {
-            ColorDialog MyDialog = new ColorDialog();
-           DialogResult rezult = MyDialog.ShowDialog();
-           
-           
-        }
+       
     }
 }

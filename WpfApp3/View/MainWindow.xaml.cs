@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -32,12 +33,13 @@ namespace WpfApp3
         List<Uri> them; // коллекция с темами
         public string path_setting = Environment.CurrentDirectory; // путь для настроек
         public string path_exe = Environment.CurrentDirectory; // путь для ехе
+       
         public MainWindow()
-        {        
+        {
             t.Interval = 10000;
             t.Elapsed += T_Elapsed;
             t.Start();
-
+            
             path_setting += "\\setting.xml";
             path_exe += "\\WpfApp3.exe";
             if (Directory.GetFiles(Environment.CurrentDirectory).ToList().Exists(i => i == path_setting))
@@ -58,9 +60,9 @@ namespace WpfApp3
 
             them = new List<Uri>
             {
-               new Uri("Style/" + "DayStyle" + ".xaml", UriKind.Relative) , 
-               new Uri("Style/" + "NightStyle" + ".xaml", UriKind.Relative) , 
-                 
+               new Uri("Style/" + "DayStyle" + ".xaml", UriKind.Relative) ,
+               new Uri("Style/" + "NightStyle" + ".xaml", UriKind.Relative) ,
+
             };
 
             InitializeComponent();
@@ -81,7 +83,7 @@ namespace WpfApp3
             }
         }
 
-        private void T_Elapsed(object sender, ElapsedEventArgs e) => AutoThem();
+        public void T_Elapsed(object sender, ElapsedEventArgs e) => AutoThem();
         public void AutoThem()
         {
             if (settings.ThemAuto)
@@ -91,49 +93,74 @@ namespace WpfApp3
                 else
                     SetDayThem();
             }
+
+            CheckArlam();
         }
 
-
-        private void Button_Click(object sender, RoutedEventArgs e) => new Setting(this).ShowDialog();
-        
-       public  void SaveSetting()
+        public void CheckArlam()
         {
-            try
+            if (settings.Arlam)
             {
-                using (FileStream fs = new FileStream("setting.xml", FileMode.Truncate, FileAccess.Write))
-                { formatter.Serialize(fs, settings); }
+                if (DateTime.Now.Hour == settings.Hour &&
+                    DateTime.Now.Minute == settings.Min)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        var win = new Arlam_Go();
+                        win.ShowDialog();
+                    });
+                   
+                }
             }
-            catch (Exception)
-            {
-                using (FileStream fs = new FileStream("setting.xml", FileMode.OpenOrCreate))
-                { formatter.Serialize(fs, settings); }
-            }
-            
         }
-        public void SetDayThem() => Application.Current.Resources.Source = them[0];     
-        public void SetNightThem() => Application.Current.Resources.Source = them[1];
 
+            void Button_Setting_Click(object sender, RoutedEventArgs e) => new Setting(this).ShowDialog();
+            void Button_Arlam_Click(object sender, RoutedEventArgs e) => new Arlam(this).ShowDialog();
 
-        internal void Autorun()
-        {
-            if (settings.Autorun)
+            public void SaveSetting()
             {
-                var autostart = Registry.CurrentUser.CreateSubKey("Software").
-                        CreateSubKey("Microsoft").
-                        CreateSubKey("Windows").
-                        CreateSubKey("CurrentVersion").
-                        CreateSubKey("Run");
-                autostart.SetValue("Alarm_clock", path_exe);
+                try
+                {
+                    using (FileStream fs = new FileStream("setting.xml", FileMode.Truncate, FileAccess.Write))
+                    { formatter.Serialize(fs, settings); }
+                }
+                catch (Exception)
+                {
+                    using (FileStream fs = new FileStream("setting.xml", FileMode.OpenOrCreate))
+                    { formatter.Serialize(fs, settings); }
+                }
+
             }
-            else
+            public void SetDayThem() => Application.Current.Resources.Source = them[0];
+            public void SetNightThem() => Application.Current.Resources.Source = them[1];
+
+
+            internal void Autorun()
             {
-                var autostart = Registry.CurrentUser.CreateSubKey("Software").
-                       CreateSubKey("Microsoft").
-                       CreateSubKey("Windows").
-                       CreateSubKey("CurrentVersion").
-                       CreateSubKey("Run");
-                autostart.DeleteValue("Alarm_clock");
+                if (settings.Autorun)
+                {
+                    var autostart = Registry.CurrentUser.CreateSubKey("Software").
+                            CreateSubKey("Microsoft").
+                            CreateSubKey("Windows").
+                            CreateSubKey("CurrentVersion").
+                            CreateSubKey("Run");
+                    autostart.SetValue("Alarm_clock", path_exe);
+                }
+                else
+                {
+                    var autostart = Registry.CurrentUser.CreateSubKey("Software").
+                           CreateSubKey("Microsoft").
+                           CreateSubKey("Windows").
+                           CreateSubKey("CurrentVersion").
+                           CreateSubKey("Run");
+                    autostart.DeleteValue("Alarm_clock");
+                }
+            }
+
+            private void Button_Click_1(object sender, RoutedEventArgs e)
+            {
+
             }
         }
     }
-}
+
