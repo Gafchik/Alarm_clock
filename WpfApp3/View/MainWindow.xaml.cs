@@ -3,19 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
 using WpfApp3.Model;
 using WpfApp3.View;
@@ -31,22 +20,27 @@ namespace WpfApp3
         XmlSerializer formatter = new XmlSerializer(typeof(Settings)); // серелизатор для настроек
         public static Settings settings = new Settings(); // класс для настроек
         List<Uri> them; // коллекция с темами
-        public string path_setting = Environment.CurrentDirectory; // путь для настроек
-        public string path_exe = Environment.CurrentDirectory; // путь для ехе
+        public string setings_foder_name = "\\Alarm clock";
        
+        public string path_setting = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); // путь для настроек
+        public string path_exe = Environment.CurrentDirectory; // путь для ехе
         public MainWindow()
         {
+            path_setting += setings_foder_name;
             t.Interval = 10000;
             t.Elapsed += T_Elapsed;
             t.Start();
-            
+           if( !Directory.Exists(path_setting))
+                Directory.CreateDirectory(path_setting);
+           
+
             path_setting += "\\setting.xml";
             path_exe += "\\WpfApp3.exe";
-            if (Directory.GetFiles(Environment.CurrentDirectory).ToList().Exists(i => i == path_setting))
+            if (Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + setings_foder_name).ToList().Exists(i => i == path_setting))
             {
                 try
                 {
-                    using (FileStream fs = new FileStream("setting.xml", FileMode.Open))
+                    using (FileStream fs = new FileStream(path_setting, FileMode.Open))
                     {
                         settings = (Settings)formatter.Deserialize(fs);
                     }
@@ -121,12 +115,12 @@ namespace WpfApp3
             {
                 try
                 {
-                    using (FileStream fs = new FileStream("setting.xml", FileMode.Truncate, FileAccess.Write))
+                    using (FileStream fs = new FileStream(path_setting, FileMode.Truncate, FileAccess.Write))
                     { formatter.Serialize(fs, settings); }
                 }
                 catch (Exception)
                 {
-                    using (FileStream fs = new FileStream("setting.xml", FileMode.OpenOrCreate))
+                    using (FileStream fs = new FileStream(path_setting, FileMode.OpenOrCreate))
                     { formatter.Serialize(fs, settings); }
                 }
 
@@ -156,11 +150,7 @@ namespace WpfApp3
                     autostart.DeleteValue("Alarm_clock");
                 }
             }
-
-            private void Button_Click_1(object sender, RoutedEventArgs e)
-            {
-
-            }
+         
         }
     }
 
