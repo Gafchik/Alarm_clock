@@ -13,6 +13,7 @@ namespace WpfApp3.Model
     {
         public Settings()
         {
+            path_exe = string.Empty;
             FullFormatTime = true;
                 Autorun = true;
             ThemNight = false;
@@ -26,7 +27,7 @@ namespace WpfApp3.Model
             Hour = 0;
             Min = 0;
     }
-
+        public string path_exe { get; set; }
         public bool FullFormatTime { get; set; }
         public bool Autorun { get; set; }
         public bool ThemAuto { get; set; }

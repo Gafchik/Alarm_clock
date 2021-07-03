@@ -24,8 +24,10 @@ namespace WpfApp3
        
         public string path_setting = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); // путь для настроек
         public string path_exe = Environment.CurrentDirectory; // путь для ехе
+        
         public MainWindow()
         {
+           
             path_setting += setings_foder_name;
             t.Interval = 10000;
             t.Elapsed += T_Elapsed;
@@ -35,7 +37,8 @@ namespace WpfApp3
            
 
             path_setting += "\\setting.xml";
-            path_exe += "\\WpfApp3.exe";
+            path_exe += "\\Fucking Clock.exe";
+            
             if (Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + setings_foder_name).ToList().Exists(i => i == path_setting))
             {
                 try
@@ -50,7 +53,8 @@ namespace WpfApp3
             }
             else
             { SaveSetting(); }
-
+            settings.path_exe = path_exe;
+            SaveSetting();
 
             them = new List<Uri>
             {
